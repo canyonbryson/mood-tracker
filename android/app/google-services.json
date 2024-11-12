@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "450214834298",
+    "project_id": "test-36b0c",
+    "storage_bucket": "test-36b0c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:450214834298:android:8e2b9dd047ccdda9c70bc3",
+        "android_client_info": {
+          "package_name": "com.app.orthopatient"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "450214834298-a6mit11m3iitsbfejjjbm4u6sj66d235.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.orthopatient",
+            "certificate_hash": "80e92ae2fbc197b9af6ffcff79c3bbd334d9ee42"
+          }
+        },
+        {
+          "client_id": "450214834298-cqhush823o9ie6ldrpme0ohsr0ginpi4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAF90IWeN8Ert2CMUBbpvh_Xkj55rSKaMg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "450214834298-cqhush823o9ie6ldrpme0ohsr0ginpi4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "450214834298-bq8bjdv59t1h3h4876lsgglaequ1npto.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.app.orthopatient"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
