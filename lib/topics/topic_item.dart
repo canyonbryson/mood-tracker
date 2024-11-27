@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_ai/topics/drawer.dart';
+import 'package:mood_tracker/topics/drawer.dart';
 
 class TopicItem extends StatelessWidget {
   final String topic;
@@ -89,7 +89,7 @@ class TopicScreen extends StatelessWidget {
             ),
           ),
         ),
-        QuizList()
+        QuizList(mood: topic)
       ]),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_ai/home/home.dart';
-import 'package:flutter_ai/services/services.dart';
+import 'package:mood_tracker/home/home.dart';
+import 'package:mood_tracker/services/services.dart';
+import 'package:mood_tracker/shared/bottom_nav.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -17,7 +18,7 @@ class _ProfileState extends State<Profile> {
     if (user != null) {
       return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.deepOrange,
+          backgroundColor: Colors.deepPurple,
           title: Text('Profile'),
         ),
         body: Center(
@@ -52,6 +53,19 @@ class _ProfileState extends State<Profile> {
             ],
           ),
         ),
+        bottomNavigationBar: BottomNavBar(
+        currentIndex: 2, // Index for Topics
+        onTap: (index) {
+          if (index == 2) return; // Already on Topics
+          switch (index) {
+            case 1:
+              Navigator.pushReplacementNamed(context, '/calendar');
+              break;
+            case 0:
+              Navigator.pushReplacementNamed(context, '/topics');
+              break;
+          }
+        },)
       );
     } else {
       return const LoadingScreen();

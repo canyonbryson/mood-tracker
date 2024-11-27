@@ -1,8 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:flutter_ai/services/firestore.dart';
-import 'package:flutter_ai/services/models.dart';
+import 'package:mood_tracker/services/firestore.dart';
+import 'package:mood_tracker/services/models.dart';
 
 class UpdateQuizWidget extends StatefulWidget {
   const UpdateQuizWidget({super.key});
@@ -24,7 +24,7 @@ class UpdateQuizWidgetState extends State<UpdateQuizWidget> {
 
   Future<void> _loadQuiz() async {
     try {
-      _quiz = await FirestoreService().getQuiz();
+      _quiz = await FirestoreService().getQuiz('happy');
       setState(() {
         _isLoading = false;
       });

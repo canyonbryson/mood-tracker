@@ -1,12 +1,31 @@
+// bottom_nav_bar.dart
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+// Define your AppColors in a separate file or inline
+class AppColors {
+  static const Color purple = Colors.deepPurple;
+  static const Color grey = Colors.grey;
+  static const Color white = Colors.white;
+}
+
 class BottomNavBar extends StatelessWidget {
-  const BottomNavBar({super.key});
+  final int currentIndex;
+  final ValueChanged<int> onTap;
+
+  const BottomNavBar({
+    super.key,
+    required this.currentIndex,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
+      currentIndex: currentIndex,
+      selectedItemColor: AppColors.purple,
+      unselectedItemColor: AppColors.grey,
       items: const [
         BottomNavigationBarItem(
           icon: Icon(
@@ -30,19 +49,8 @@ class BottomNavBar extends StatelessWidget {
           label: 'Profile',
         ),
       ],
-      fixedColor: Colors.deepPurple[200],
-      onTap: (int idx) {
-        switch (idx) {
-          case 0:
-            break;
-          case 1:
-            Navigator.pushNamed(context, '/calendar');
-            break;
-          case 2:
-            Navigator.pushNamed(context, '/profile');
-            break;
-        }
-      },
+      onTap: onTap,
+      type: BottomNavigationBarType.fixed, // Ensures all items are displayed
     );
   }
 }

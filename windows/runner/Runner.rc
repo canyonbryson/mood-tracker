@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.app.orthopatient" "\0"
-            VALUE "FileDescription", "flutter_ai" "\0"
+            VALUE "CompanyName", "com.app.moodtracker" "\0"
+            VALUE "FileDescription", "mood_tracker" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "flutter_ai" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2024 com.app.orthopatient. All rights reserved." "\0"
-            VALUE "OriginalFilename", "flutter_ai.exe" "\0"
-            VALUE "ProductName", "flutter_ai" "\0"
+            VALUE "InternalName", "mood_tracker" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2024 com.app.moodtracker. All rights reserved." "\0"
+            VALUE "OriginalFilename", "mood_tracker.exe" "\0"
+            VALUE "ProductName", "mood_tracker" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

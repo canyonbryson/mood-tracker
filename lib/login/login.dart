@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_ai/services/auth.dart';
+import 'package:mood_tracker/services/auth.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Login extends StatelessWidget {
@@ -14,23 +14,38 @@ class Login extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            const FlutterLogo(
-              size: 150,
-            ),
-            Flexible(
-              child: LoginButton(
-                icon: FontAwesomeIcons.userNinja,
-                text: 'Continue as Guest',
-                loginMethod: AuthService().anonLogin,
-                color: Colors.deepPurple,
+            const Text(
+              'Mood Tracker',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 40,
+                fontWeight: FontWeight.bold,
               ),
             ),
+            const Text(
+              'Are you having a good day today?',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.grey,
+              ),
+            ),
+            Image(image: AssetImage('assets/images/manic.jpeg')),
+            // Flexible(
+            //   child: LoginButton(
+            //     icon: FontAwesomeIcons.userNinja,
+            //     text: 'Continue as Guest',
+            //     loginMethod: AuthService().anonLogin,
+            //     color: Colors.deepPurple,
+            //   ),
+            // ),
             LoginButton(
               text: 'Sign in with Google',
               icon: FontAwesomeIcons.google,
               color: Colors.blue,
               loginMethod: AuthService().googleLogin,
             ),
+            const SizedBox(height: 10),
           ],
         ),
       ),

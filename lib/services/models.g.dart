@@ -61,6 +61,7 @@ Map<String, dynamic> _$QuizToJson(Quiz instance) => <String, dynamic>{
 
 Report _$ReportFromJson(Map<String, dynamic> json) => Report(
       uid: json['uid'] as String? ?? '',
+      id: json['id'] as String? ?? '',
       mood: json['mood'] as String? ?? "",
       questions: (json['questions'] as List<dynamic>?)
               ?.map((e) => Question.fromJson(e as Map<String, dynamic>))
@@ -70,6 +71,7 @@ Report _$ReportFromJson(Map<String, dynamic> json) => Report(
     );
 
 Map<String, dynamic> _$ReportToJson(Report instance) => <String, dynamic>{
+      'id': instance.id,
       'uid': instance.uid,
       'questions': instance.questions,
       'mood': instance.mood,

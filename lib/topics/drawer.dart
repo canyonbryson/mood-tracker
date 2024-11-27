@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_ai/quiz/quiz.dart';
-// import 'package:flutter_ai/services/models.dart';
+import 'package:mood_tracker/quiz/quiz.dart';
+// import 'package:mood_tracker/services/models.dart';
 
 // class TopicDrawer extends StatelessWidget {
 //   final List<Topic> topics;
@@ -38,7 +38,8 @@ import 'package:flutter_ai/quiz/quiz.dart';
 // }
 
 class QuizList extends StatelessWidget {
-  const QuizList({super.key});
+  final String mood;
+  const QuizList({super.key, required this.mood});
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +53,7 @@ class QuizList extends StatelessWidget {
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (BuildContext context) => QuizScreen(),
+                  builder: (BuildContext context) => QuizScreen(mood: mood),
                 ),
               );
             },

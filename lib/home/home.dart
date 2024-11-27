@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_ai/login/login.dart';
-import 'package:flutter_ai/services/auth.dart';
-import 'package:flutter_ai/topics/topics.dart';
+import 'package:mood_tracker/login/login.dart';
+import 'package:mood_tracker/services/auth.dart';
+import 'package:mood_tracker/topics/topics.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});

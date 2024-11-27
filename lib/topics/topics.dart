@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_ai/shared/bottom_nav.dart';
-import 'package:flutter_ai/shared/shared.dart';
-import 'package:flutter_ai/topics/topic_item.dart';
+import 'package:mood_tracker/shared/bottom_nav.dart';
+import 'package:mood_tracker/shared/shared.dart';
+import 'package:mood_tracker/topics/topic_item.dart';
 
 class Topics extends StatelessWidget {
   const Topics({super.key});
@@ -20,7 +20,20 @@ class Topics extends StatelessWidget {
               .toList(),
         ),
       ),
-      bottomNavigationBar: const BottomNavBar(),
+      bottomNavigationBar: BottomNavBar(
+        currentIndex: 0, // Index for Topics
+        onTap: (index) {
+          if (index == 0) return; // Already on Topics
+          switch (index) {
+            case 1:
+              Navigator.pushReplacementNamed(context, '/calendar');
+              break;
+            case 2:
+              Navigator.pushReplacementNamed(context, '/profile');
+              break;
+          }
+        },
+      )
     );
   }
 }

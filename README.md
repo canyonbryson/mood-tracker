@@ -1,4 +1,4 @@
-# flutter_ai
+# mood_tracker
 
 A new Flutter project.
 

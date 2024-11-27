@@ -12,6 +12,17 @@ class Option {
 
   factory Option.fromJson(Map<String, dynamic> json) => _$OptionFromJson(json);
   Map<String, dynamic> toJson() => _$OptionToJson(this);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Option &&
+          runtimeType == other.runtimeType &&
+          value == other.value;
+
+  @override
+  int get hashCode => value.hashCode;
+
 }
 
 @JsonSerializable()
@@ -54,6 +65,7 @@ class Quiz {
 
 @JsonSerializable()
 class Report {
+  String id;
   String uid;
   List<Question> questions;
   String mood;
@@ -61,6 +73,7 @@ class Report {
 
   Report(
       {this.uid = '',
+      this.id = '',
       this.mood = "",
       this.questions = const [],
       this.date = ''});

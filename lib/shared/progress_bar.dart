@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_ai/services/models.dart';
+import 'package:mood_tracker/services/models.dart';
 import 'package:provider/provider.dart';
 
 class AnimatedProgressbar extends StatelessWidget {

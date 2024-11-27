@@ -1,17 +1,20 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_ai/services/auth.dart';
-import 'package:flutter_ai/services/models.dart';
+import 'package:mood_tracker/services/auth.dart';
+import 'package:mood_tracker/services/models.dart';
 
 class FirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   /// Retrieves a single quiz document
-  Future<Quiz> getQuiz() async {
+  Future<Quiz> getQuiz(String mood) async {
     var ref = _db.collection('quizzes').doc('1');
     var snapshot = await ref.get();
-    return Quiz.fromJson(snapshot.data() ?? {});
+    Quiz q = Quiz.fromJson(snapshot.data() ?? {});
+    //set mood
+    q.mood = mood;
+    return q;
   }
 
   Future<void> updateQuiz(Quiz quiz) {
@@ -36,16 +39,15 @@ class FirestoreService {
     return ref.set(q, SetOptions(merge: false));
   }
 
-  Future<void> saveReport(Quiz quiz) {
+  Future<void> saveReport(Quiz quiz, DateTime? date, String? reportId) async {
     var user = AuthService().user;
     if (user == null) {
       return Future.error('User not logged in');
     }
-    var ref = _db.collection('reports').add(
-      {
+    final reportData = {
         'uid': user.uid,
         'mood': quiz.mood,
-        'date': DateTime.now().toIso8601String(),
+        'date': date != null ? date.toIso8601String() : DateTime.now().toIso8601String(),
         'questions': quiz.questions
             .map(
               (q) => {
@@ -57,10 +59,26 @@ class FirestoreService {
               },
             )
             .toList(),
-      },
-    );
-
-    return ref.then((value) => print('Report saved'));
+      };
+    // print all open answers
+    print('\n\nAnswers:\n');
+    quiz.questions.forEach((q) {
+      if (q.type.toLowerCase() == 'open answer') {
+        print(q.answer);
+      }
+    });
+    print(reportData['date']);
+    print(reportId);
+    if (reportId != null) {
+      await FirebaseFirestore.instance
+          .collection('reports')
+          .doc(reportId)
+          .set(reportData, SetOptions(merge: false));
+    } else {
+      await FirebaseFirestore.instance
+          .collection('reports')
+          .add(reportData);
+    }
   }
 
   // get reports for last month
@@ -79,7 +97,11 @@ class FirestoreService {
 
     return ref.get().then((snapshot) {
       return snapshot.docs.map((doc) {
-        return Report.fromJson(doc.data());
+        final data = doc.data();
+        data['id'] = doc.id;
+        print('\n\nID: ${doc.id}\n\n');
+        
+        return Report.fromJson(data);
       }).toList();
     });
   }
