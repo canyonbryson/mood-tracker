@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:mood_tracker/home/home.dart';
 import 'package:mood_tracker/quiz/quiz.dart';
 import 'package:mood_tracker/services/services.dart';
-import 'package:mood_tracker/shared/bottom_nav.dart';
 import 'package:intl/intl.dart';
 
 class Calendar extends StatefulWidget {
@@ -20,8 +19,11 @@ class _CalendarState extends State<Calendar> {
   void initState() {
     super.initState();
     DateTime now = DateTime.now();
+    // Initialize displayed month to the 1st of the current month
     _displayedMonth = DateTime(now.year, now.month, 1);
-    _reportsFuture = FirestoreService().getReports();
+
+    // **Use getReportsForMonth** instead of getReports
+    _reportsFuture = FirestoreService().getReportsForMonth(_displayedMonth);
   }
 
   // Mood to Color mapping
@@ -40,8 +42,9 @@ class _CalendarState extends State<Calendar> {
     if (user != null) {
       return Scaffold(
         appBar: AppBar(
-          title: Text('Calendar'),
+          title: const Text('Calendar'),
           backgroundColor: Colors.deepPurple,
+          elevation: 0,
         ),
         body: FutureBuilder<List<Report>>(
           future: _reportsFuture,
@@ -63,8 +66,8 @@ class _CalendarState extends State<Calendar> {
 
             // Get total days in the displayed month
             int daysInMonth = DateTime(year, month + 1, 0).day;
-            // Get the weekday of the first day of the month
-            int firstWeekday = DateTime(year, month, 1).weekday; // Monday = 1, Sunday = 7
+            // Get the weekday of the first day of the month (Monday=1, Sunday=7)
+            int firstWeekday = DateTime(year, month, 1).weekday;
             int emptyDaysAtStart = firstWeekday - 1;
 
             // Map reports by date for quick access
@@ -75,19 +78,23 @@ class _CalendarState extends State<Calendar> {
               dateReports[dateKey] = report;
             }
 
+            // Build the calendar
             List<TableRow> calendarRows = [];
 
-            // Add header row for days of the week
+            // Day of week headers
+            List<String> weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
             calendarRows.add(TableRow(
-              children: [
-                Center(child: Text('Mon')),
-                Center(child: Text('Tue')),
-                Center(child: Text('Wed')),
-                Center(child: Text('Thu')),
-                Center(child: Text('Fri')),
-                Center(child: Text('Sat')),
-                Center(child: Text('Sun')),
-              ],
+              children: weekdays.map((day) {
+                return Center(
+                  child: Text(
+                    day,
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                  ),
+                );
+              }).toList(),
             ));
 
             List<Widget> weekDays = [];
@@ -106,11 +113,11 @@ class _CalendarState extends State<Calendar> {
 
                 Color dayColor;
                 if (date.isAfter(DateTime.now())) {
-                  dayColor = Colors.grey; // Future dates
+                  dayColor = Colors.grey.shade300; // Future dates - light grey
                 } else if (report != null) {
-                  dayColor = moodColors[report.mood] ?? Colors.white;
+                  dayColor = moodColors[report.mood.toLowerCase()] ?? Colors.white;
                 } else {
-                  dayColor = Colors.white; // No report for this day
+                  dayColor = Colors.white; // No report
                 }
 
                 weekDays.add(
@@ -119,12 +126,33 @@ class _CalendarState extends State<Calendar> {
                       _onDayTapped(date, report);
                     },
                     child: Container(
+                      margin: const EdgeInsets.all(4),
                       decoration: BoxDecoration(
                         color: dayColor,
-                        border: Border.all(color: Colors.black12),
+                        borderRadius: BorderRadius.circular(8),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          )
+                        ],
                       ),
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                      child: Center(child: Text('$dayCounter')),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 14,
+                      ),
+                      child: Center(
+                        child: Text(
+                          '$dayCounter',
+                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: date.isAfter(DateTime.now())
+                                    ? Colors.black45
+                                    : Colors.black87,
+                              ),
+                        ),
+                      ),
                     ),
                   ),
                 );
@@ -145,76 +173,121 @@ class _CalendarState extends State<Calendar> {
             }
 
             // Build the calendar table
-            Table calendarTable = Table(
-              border: TableBorder.all(color: Colors.black12),
+            Widget calendarTable = Table(
+              border: const TableBorder.symmetric(
+                inside: BorderSide(color: Colors.transparent),
+              ),
               children: calendarRows,
             );
 
             return SingleChildScrollView(
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  SizedBox(height: 16),
-                  // Back and Next buttons with the month name
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.arrow_back),
-                        onPressed: () {
-                          setState(() {
-                            _displayedMonth = DateTime(
-                                _displayedMonth.year, _displayedMonth.month - 1, 1);
-                          });
-                        },
-                      ),
-                      Text(
-                        nameOfMonth,
-                        style: const TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.bold),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.arrow_forward),
-                        onPressed: () {
-                          setState(() {
-                            _displayedMonth = DateTime(
-                                _displayedMonth.year, _displayedMonth.month + 1, 1);
-                          });
-                        },
-                      ),
-                    ],
+                  const SizedBox(height: 20),
+                  // Month navigation row
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.arrow_back_ios),
+                          onPressed: () {
+                            setState(() {
+                              // Go back one month
+                              _displayedMonth = DateTime(
+                                _displayedMonth.year,
+                                _displayedMonth.month - 1,
+                                1,
+                              );
+                              // **Update the reportsFuture**
+                              _reportsFuture = FirestoreService()
+                                  .getReportsForMonth(_displayedMonth);
+                            });
+                          },
+                        ),
+                        Text(
+                          nameOfMonth,
+                          style:
+                              Theme.of(context).textTheme.headlineMedium!.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.arrow_forward_ios),
+                          onPressed: () {
+                            setState(() {
+                              // Go forward one month
+                              _displayedMonth = DateTime(
+                                _displayedMonth.year,
+                                _displayedMonth.month + 1,
+                                1,
+                              );
+                              // **Update the reportsFuture**
+                              _reportsFuture = FirestoreService()
+                                  .getReportsForMonth(_displayedMonth);
+                            });
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                  SizedBox(height: 16),
-                  calendarTable,
-                  SizedBox(height: 16),
-                  // Refresh button
-                  ElevatedButton(
+                  const SizedBox(height: 10),
+
+                  // Calendar container
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 16),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 8,
+                          offset: Offset(0, 4),
+                        )
+                      ],
+                    ),
+                    child: AspectRatio(
+                      aspectRatio: 1.0, // Make it more square-ish
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Expanded(child: calendarTable),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Refresh button (optional)
+                  TextButton.icon(
                     onPressed: () async {
                       setState(() {
-                        _reportsFuture = FirestoreService().getReports();
+                        // Refresh the same displayed month
+                        _reportsFuture = FirestoreService()
+                            .getReportsForMonth(_displayedMonth);
                       });
                     },
-                    child: const Text('Refresh'),
+                    icon:
+                        const Icon(Icons.refresh, color: Colors.deepPurpleAccent),
+                    label: Text(
+                      'Refresh',
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                            color: Colors.deepPurpleAccent,
+                          ),
+                    ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 30),
                 ],
               ),
             );
           },
         ),
-        bottomNavigationBar: BottomNavBar(
-          currentIndex: 1,
-          onTap: (index) {
-            if (index == 1) return;
-            switch (index) {
-              case 0:
-                Navigator.pushReplacementNamed(context, '/topics');
-                break;
-              case 2:
-                Navigator.pushReplacementNamed(context, '/profile');
-                break;
-            }
-          },
-        ),
+        backgroundColor: Colors.grey[900],
       );
     } else {
       return const LoadingScreen();
@@ -225,7 +298,7 @@ class _CalendarState extends State<Calendar> {
     if (date.isAfter(DateTime.now())) {
       // Do nothing or show a message
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Cannot select future dates')),
+        const SnackBar(content: Text('Cannot select future dates')),
       );
       return;
     }
@@ -242,25 +315,28 @@ class _CalendarState extends State<Calendar> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Mood: ${report.mood}'),
-                  SizedBox(height: 8),
-                  Text('Questions:'),
+                  const SizedBox(height: 8),
+                  const Text('Questions:'),
                   const SizedBox(height: 8),
                   ...report.questions.map((q) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          q.text,
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 4),
-                        if (q.answer != null && q.answer!.isNotEmpty)
-                          Text('Answer: ${q.answer}'),
-                        if (q.selected != null && q.selected!.isNotEmpty && q.type != 'Open Answer')
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 12.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
                           Text(
-                              'Selected: ${q.selected!.map((o) => o.value).join(', ')}'),
-                        const SizedBox(height: 12),
-                      ],
+                            q.text,
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 4),
+                          if (q.answer != null && q.answer!.isNotEmpty)
+                            Text('Answer: ${q.answer}'),
+                          if (q.selected != null &&
+                              q.selected!.isNotEmpty &&
+                              q.type != 'Open Answer')
+                            Text('Selected: ${q.selected!.map((o) => o.value).join(', ')}'),
+                        ],
+                      ),
                     );
                   }),
                 ],
@@ -332,4 +408,3 @@ class _CalendarState extends State<Calendar> {
     }
   }
 }
- 

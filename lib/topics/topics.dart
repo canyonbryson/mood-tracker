@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mood_tracker/shared/bottom_nav.dart';
-import 'package:mood_tracker/shared/shared.dart';
 import 'package:mood_tracker/topics/topic_item.dart';
 
 class Topics extends StatelessWidget {
@@ -11,29 +9,14 @@ class Topics extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.deepPurple,
-        title: const Text('Topics'),
+        title: const Text("Today's Mood"),
       ),
-      body: Scrollable(
-        viewportBuilder: (context, position) => ListView(
-          children: ['manic', 'happy', 'neutral', 'sad', 'depressed']
-              .map((topic) => TopicItem(topic: topic))
-              .toList(),
-        ),
+      // The rest is just a list (no bottom nav bar, no separate route switching)
+      body: ListView(
+        children: ['manic', 'happy', 'neutral', 'sad', 'depressed']
+            .map((topic) => TopicItem(topic: topic))
+            .toList(),
       ),
-      bottomNavigationBar: BottomNavBar(
-        currentIndex: 0, // Index for Topics
-        onTap: (index) {
-          if (index == 0) return; // Already on Topics
-          switch (index) {
-            case 1:
-              Navigator.pushReplacementNamed(context, '/calendar');
-              break;
-            case 2:
-              Navigator.pushReplacementNamed(context, '/profile');
-              break;
-          }
-        },
-      )
     );
   }
 }

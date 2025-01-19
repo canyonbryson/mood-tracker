@@ -48,6 +48,7 @@ class Question {
 @JsonSerializable()
 class Quiz {
   String id;
+  String uid;
   String title;
   String description;
   String mood;
@@ -58,6 +59,7 @@ class Quiz {
       this.description = '',
       this.id = '',
       this.mood = '',
+      this.uid = '',
       this.questions = const []});
   factory Quiz.fromJson(Map<String, dynamic> json) => _$QuizFromJson(json);
   Map<String, dynamic> toJson() => _$QuizToJson(this);

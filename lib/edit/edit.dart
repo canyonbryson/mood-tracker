@@ -102,14 +102,7 @@ class UpdateQuizWidgetState extends State<UpdateQuizWidget> {
                         _quiz.description = value ?? '';
                       },
                     ),
-                    // Mood
-                    TextFormField(
-                      initialValue: _quiz.mood,
-                      decoration: InputDecoration(labelText: 'Mood'),
-                      onSaved: (value) {
-                        _quiz.mood = value ?? '';
-                      },
-                    ),
+                    
                     SizedBox(height: 20),
                     Text('Questions', style: TextStyle(fontSize: 18)),
                     // List of Questions

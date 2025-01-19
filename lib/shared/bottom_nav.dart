@@ -29,17 +29,25 @@ class BottomNavBar extends StatelessWidget {
       items: const [
         BottomNavigationBarItem(
           icon: Icon(
-            FontAwesomeIcons.graduationCap,
+            FontAwesomeIcons.pencil,
             size: 20,
           ),
-          label: 'Topics',
+          label: 'Track',
         ),
         BottomNavigationBarItem(
           icon: Icon(
-            FontAwesomeIcons.bolt,
+            FontAwesomeIcons.calendarDay,
             size: 20,
           ),
           label: 'Calendar',
+        ),
+        // Patterns page
+        BottomNavigationBarItem(
+          icon: Icon(
+            FontAwesomeIcons.chartLine,
+            size: 20,
+          ),
+          label: 'Patterns',
         ),
         BottomNavigationBarItem(
           icon: Icon(

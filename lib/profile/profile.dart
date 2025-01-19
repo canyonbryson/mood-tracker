@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/home/home.dart';
 import 'package:mood_tracker/services/services.dart';
-import 'package:mood_tracker/shared/bottom_nav.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -26,10 +25,13 @@ class _ProfileState extends State<Profile> {
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 50.0, bottom: 30),
-                child: Text('Hello Sabrina, I love you!'),
-              ),
+              const SizedBox(height: 50),
+              // the user email, if logged in
+              if (user.email != null) ...[
+                Text('Logged in as ${user.email}'),
+                const SizedBox(height: 20),
+              ],
+              
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: ElevatedButton(
@@ -39,6 +41,7 @@ class _ProfileState extends State<Profile> {
                   },
                 ),
               ),
+              
               ElevatedButton(
                 child: const Text('Logout'),
                 onPressed: () async {
@@ -50,22 +53,13 @@ class _ProfileState extends State<Profile> {
                 },
               ),
               const Spacer(),
+              Padding(
+                padding: const EdgeInsets.only(top: 50.0, bottom: 30),
+                child: Text('Dedicated to my loving wife, Sabrina.'),
+              ),
             ],
           ),
         ),
-        bottomNavigationBar: BottomNavBar(
-        currentIndex: 2, // Index for Topics
-        onTap: (index) {
-          if (index == 2) return; // Already on Topics
-          switch (index) {
-            case 1:
-              Navigator.pushReplacementNamed(context, '/calendar');
-              break;
-            case 0:
-              Navigator.pushReplacementNamed(context, '/topics');
-              break;
-          }
-        },)
       );
     } else {
       return const LoadingScreen();
